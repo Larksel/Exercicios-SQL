@@ -1,0 +1,103 @@
+# 1
+use dbPessoa
+
+# 2
+db.pessoa.insertMany([
+  { nome: "João", endereco: { rua: "Rua 1", num: 332, bairro: "Centro" }, cidade: "Jales", estado: "SP", telefone: ["99755-3322", "99887-3020", "99441-2356"], idade: 54 },
+	{ nome: "Maria", telefone: ["3642-5589"], idade: 48 },
+	{ nome: "Bruno", endereco: { rua: "Rua 9", num: 211, bairro: "Jd. Palmeira"}, cidade: "Jales", estado: "SP", telefone: ["99322-3456", "98910-1111"] },
+	{ nome: "Lucas", endereco: { rua: "Rua 3", num: 344, bairro: "Centro" }, cidade: "Aspásia", estado: "SP", idade: 11 }
+])
+
+# 3
+db.getCollectionNames()
+
+# 4
+db.pessoa.find()
+
+# 5
+db.pessoa.insertOne({
+	nome: "Carlos",
+	cidade: "Jales",
+})
+
+# 6
+db.pessoa.updateOne({ nome: "Bruno" }, { $set: { idade: 30 } })
+db.pessoa.find({ nome: "Bruno" })
+
+# 7
+db.pessoa.deleteOne({ nome: "Carlos" })
+db.pessoa.find()
+
+# 8
+db.pessoa.find().sort({ nome: 1 })
+
+# 9
+db.pessoa.find({}, { _id: 0, idade: 1 }).sort({ idade: -1 })
+
+# 10
+db.pessoa.find({ nome: "Lucas", idade: 11 })
+
+# 11
+db.pessoa.find({ idade: { $gt: 30 }})
+
+# 12
+db.pessoa.find({ idade: { $ne: 11 }}).sort({ idade: 1 })
+
+# 13
+db.pessoa.find({ idade: { $gte: 18 }}).count()
+
+# 14
+db.pessoa.find({ idade: { $gte: 18 }}, { _id: 0, nome: 1, cidade: 1})
+
+# 15
+db.pessoa.find({ idade: { $gte: 20 }}, { _id: 0, nome: 1, idade: 1 }).sort({ idade: -1 })
+
+# 16
+db.pessoa.find({ idade: { $gte: 20 }}).count()
+
+# 17
+db.pessoa.find({ idade: { $gt: 50, $lt: 90 }}).count()
+
+# 18
+db.pessoa.find({ "endereco.bairro": "Centro", idade: { $gt: 30 } }).count()
+
+# 19
+db.pessoa.updateOne({ nome: "Maria" }, {$set: { endereco: { rua: "Rua 7", num: 222, bairro: "Centro" }, cidade: "Jales", estado: "SP" }})
+
+# 20
+db.pessoa.updateOne({ nome: "Maria" }, {$unset: { idade: 0 }})
+
+# 21
+db.pokemon.find({ name: /zard/i })
+
+# 22
+db.pokemon.find({ name: /Mega/i }).count()
+
+# 23
+db.pokemon.distinct("types")
+
+# 24
+db.pokemon.find({ types: { $nin: ["Psychic", "Flying"] } }).count()
+
+# 25
+db.pokemon.find({ types: {$all: ["Psychic", "Flying"]}}, { _id: 0, name: 1 })
+
+# 26
+db.pokemon.find({}, { _id: 0, name: 1, defense: 1 }).sort({ defense: -1 }).limit(10)
+
+# 27
+db.pokemon.find({}, { _id: 0, name: 1, speed: 1 }).sort({ speed: -1 }).skip(10).limit(10)
+
+# 28
+db.pokemon.find({ speed: { $lte: 100 }, hp: { $lte: 100 } })
+
+# 29
+db.pokemon.find({ $or: [{defense: { $gt: 220 }}, {attack: { $gt: 180 }}] })
+
+# 30
+db.pokemon.find({ $and: [
+  {defense: { $gte: 80, $lte: 100 }},
+  {attack: { $gte: 60, $lte: 90 }},
+  {speed: { $gt: 100 }}
+]})
